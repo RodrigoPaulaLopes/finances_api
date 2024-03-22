@@ -2,15 +2,15 @@ import { BadRequestException, Injectable, NotFoundException, UnauthorizedExcepti
 import { Role } from "../users/enums/roles.enum"
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { Repository } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { hash, compare } from "bcrypt"
 import { AuthDto } from './dto/login-auth.dto';
 import { TokenDto } from './dto/token.dto';
 import { EmailDto } from './dto/send-code-email.dto';
-import { MailService } from 'src/mail/mail.service';
-import { MessageDto } from 'src/mail/dtos/message.dto';
+import { MailService } from '../mail/mail.service';
+import { MessageDto } from '../mail/dtos/message.dto';
 import { ChangePassowrdDto } from './dto/change-password-auth.dto ';
 
 @Injectable()

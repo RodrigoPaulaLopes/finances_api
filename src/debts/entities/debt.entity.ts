@@ -1,6 +1,7 @@
-import { User } from "src/users/entities/user.entity";
+import { User } from "../../users/entities/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { StatusPayment } from "../enums/status-payment.enum"
+
 @Entity('debts')
 export class Debt {
 

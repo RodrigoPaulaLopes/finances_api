@@ -1,4 +1,4 @@
-import { Debt } from "src/debts/entities/debt.entity"
+import { Debt } from "../../debts/entities/debt.entity"
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm"
 import { Role } from "../enums/roles.enum"
 @Entity('users')

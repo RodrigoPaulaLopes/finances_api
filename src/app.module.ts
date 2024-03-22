@@ -5,6 +5,7 @@ import {TypeOrmModule} from "@nestjs/typeorm"
 import {ConfigModule} from "@nestjs/config"
 import { User } from './users/entities/user.entity';
 import {Debt} from "./debts/entities/debt.entity"
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [ConfigModule.forRoot() ,TypeOrmModule.forRoot({
     type: 'mysql',
@@ -15,7 +16,7 @@ import {Debt} from "./debts/entities/debt.entity"
     database: process.env.DATABASE,
     entities: [User, Debt],
     synchronize: true
-  }),UsersModule, DebtsModule],
+  }),UsersModule, DebtsModule, AuthModule],
   controllers: [],
   providers: [],
 })

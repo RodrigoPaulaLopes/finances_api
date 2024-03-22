@@ -24,6 +24,7 @@ export class User {
     email: string
     @Column({
         length: 100,
+        unique: true,
         nullable: false
     })
     username: string
@@ -31,7 +32,11 @@ export class User {
         nullable: false
     })
     password: string
-
+    @Column({
+        nullable: false,
+        
+    })
+    role: Role
     @OneToMany(() => Debt, (depts) => depts.user)
     debts?: Debt[]
 

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Role } from "../users/enums/roles.enum"
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { Repository } from 'typeorm';
@@ -11,6 +11,7 @@ import { TokenDto } from './dto/token.dto';
 import { EmailDto } from './dto/send-code-email.dto';
 import { MailService } from 'src/mail/mail.service';
 import { MessageDto } from 'src/mail/dtos/message.dto';
+import { ChangePassowrdDto } from './dto/change-password-auth.dto ';
 
 @Injectable()
 export class AuthService {
@@ -63,5 +64,17 @@ export class AuthService {
       html: `<p>Your code is: ${code}</p>`
     }
     this.mail.sendEmail(message)
+  }
+
+  async changePassowrd(data: ChangePassowrdDto){
+    const user = await this.userRepository.findOne({where: {userPasswrodCode: data.code}})
+
+    if (!user) throw new BadRequestException("Invalid Code");
+
+    const hash_pass = await hash(data.password, 10)
+    return await this.userRepository.update(user.id, {password: hash_pass, userPasswrodCode: null})
+
+    
+    
   }
 }

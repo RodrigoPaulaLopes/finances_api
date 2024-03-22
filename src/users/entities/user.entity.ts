@@ -41,7 +41,8 @@ export class User {
 
     @Column({
         nullable: true,
-        default: null
+        default: null,
+        unique: true
     })
     userPasswrodCode?: number
     @OneToMany(() => Debt, (depts) => depts.user)

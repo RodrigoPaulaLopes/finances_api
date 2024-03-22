@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto/login-auth.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { EmailDto } from './dto/send-code-email.dto';
+import { ChangePassowrdDto } from './dto/change-password-auth.dto ';
 
 @Controller('auth')
 export class AuthController {
@@ -22,5 +23,9 @@ export class AuthController {
   async send_code(@Body() email: EmailDto) {
     return await this.authService.sendCode(email);
   }
- 
+
+  @Post('/change-password')
+  async change_password(@Body() data: ChangePassowrdDto) {
+    return await this.authService.changePassowrd(data);
+  }
 }

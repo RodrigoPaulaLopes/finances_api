@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/login-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { AuthDto } from './dto/login-auth.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Controller('auth')
@@ -13,5 +12,9 @@ export class AuthController {
     return await this.authService.register(createUserDto);
   }
 
+  @Post("/login")
+  async login(@Body() data: AuthDto) {
+    return await this.authService.login(data);
+  }
  
 }

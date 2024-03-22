@@ -6,8 +6,15 @@ import {ConfigModule} from "@nestjs/config"
 import { User } from './users/entities/user.entity';
 import {Debt} from "./debts/entities/debt.entity"
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 @Module({
-  imports: [ConfigModule.forRoot() ,TypeOrmModule.forRoot({
+  imports: [ConfigModule.forRoot(),
+  JwtModule.register({
+    global: true,
+    secret: process.env.SECRET,
+    signOptions: { expiresIn: '60s' },
+  }),
+  TypeOrmModule.forRoot({
     type: 'mysql',
     host:  'localhost',
     port: Number(process.env.DB_PORT),

@@ -44,8 +44,6 @@ export class AuthService {
     const payload = { sub: user.id, username: user.username, email: user.email };
     const access_token: TokenDto = { access_token: this.jwtService.sign(payload) }
     return access_token
-
-
   }
   async sendCode(data: EmailDto) {
     const user = await this.userRepository.findOne({ where: { email: data.email } })

@@ -44,7 +44,7 @@ export class User {
         default: null,
         unique: true
     })
-    userPasswrodCode?: number
+    userPasswordCode?: number
     @OneToMany(() => Debt, (depts) => depts.user)
     debts?: Debt[]
 

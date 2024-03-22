@@ -54,7 +54,7 @@ export class AuthService {
 
     const code = Math.floor(Math.random() * 90000) + 10000;
 
-    await this.userRepository.update(user.id, { userPasswrodCode: code })
+    await this.userRepository.update(user.id, { userPasswordCode: code })
     const message: MessageDto = {
       from_address: data.email,
       to_name: user.name,
@@ -67,12 +67,13 @@ export class AuthService {
   }
 
   async changePassowrd(data: ChangePassowrdDto){
-    const user = await this.userRepository.findOne({where: {userPasswrodCode: data.code}})
+    const user = await this.userRepository.findOne({where: {userPasswordCode: data.code}})
 
+    
     if (!user) throw new BadRequestException("Invalid Code");
 
     const hash_pass = await hash(data.password, 10)
-    return await this.userRepository.update(user.id, {password: hash_pass, userPasswrodCode: null})
+    return await this.userRepository.update(user.id, {password: hash_pass, userPasswordCode: null})
 
     
     

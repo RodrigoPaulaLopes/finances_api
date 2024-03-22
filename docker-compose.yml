@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  mysql:
+    container_name: finances_app_db
+    restart: always
+    image: mysql
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=finances
+    volumes:
+      - finances_app_db:/var/lib/mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+volumes:
+  finances_app_db:

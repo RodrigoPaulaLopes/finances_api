@@ -1,5 +1,6 @@
 import { Debt } from "src/debts/entities/debt.entity"
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm"
+import { Role } from "../enums/roles.enum"
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn('uuid')
@@ -37,6 +38,12 @@ export class User {
         
     })
     role: Role
+
+    @Column({
+        nullable: true,
+        default: null
+    })
+    userPasswrodCode?: number
     @OneToMany(() => Debt, (depts) => depts.user)
     debts?: Debt[]
 

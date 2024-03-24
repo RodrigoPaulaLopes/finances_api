@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { DebtsModule } from './debts/debts.module';
 import {TypeOrmModule} from "@nestjs/typeorm"
@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { MailModule } from './mail/mail.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { AuthorizationMiddleware } from './authorization/authorization.middleware';
 @Module({
   imports: [ConfigModule.forRoot(),
     MailerModule.forRoot({
@@ -25,7 +26,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
   JwtModule.register({
     global: true,
     secret: process.env.SECRET,
-    signOptions: { expiresIn: '60s' },
+    signOptions: { expiresIn: '60m' },
   }),
   TypeOrmModule.forRoot({
     type: 'mysql',
@@ -40,4 +41,14 @@ import { MailerModule } from '@nestjs-modules/mailer';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthorizationMiddleware).exclude({
+      path: "/auth",
+      method: RequestMethod.ALL
+    }).forRoutes({
+      path: "/users",
+      method: RequestMethod.ALL
+    })
+  }
+}

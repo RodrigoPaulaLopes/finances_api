@@ -1,22 +1,25 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import {hash} from "bcrypt"
+import { compare, hash } from "bcrypt"
 import { Role } from './enums/roles.enum';
+import { ChangePasswordDto } from './dto/change-password-user.dto';
 
 @Injectable()
 export class UsersService {
 
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) { }
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    if (await this.userRepository.exists({ where: { username: createUserDto.username } })) throw new BadRequestException("User already exists")
+
+    return await this.userRepository.save({ ...createUserDto, password: await hash(createUserDto.password, 10) })
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return await this.userRepository.find();
   }
 
   async findOne(id: string) {
@@ -26,13 +29,27 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto, current_user_id: string) {
-    
+
 
     if (!await this.userRepository.exists({ where: { id: id } })) throw new NotFoundException("User not found!")
+
+    return await this.userRepository.update(id, { ...updateUserDto, password: await hash(updateUserDto.password, 10) })
 
 
   }
 
+  async change_password(user: User, changePassowrdDto: ChangePasswordDto) {
+
+    if (! await this.userRepository.exists({ where: { id: user.id } })) throw new NotFoundException("User not found!")
+
+
+    if (! await compare(changePassowrdDto.old_password, user.password)) throw new BadRequestException("wrong old password")
+
+    if (changePassowrdDto.new_password !== changePassowrdDto.confirm_new_password) throw new BadRequestException("password is not equal to confirm password")
+
+
+    return await this.userRepository.update(user.id, { password: await hash(changePassowrdDto.new_password, 10) })
+  }
   async update_current_user(user: User, updateUserDto: UpdateUserDto) {
     if (!await this.userRepository.exists({ where: { id: updateUserDto.id } })) throw new NotFoundException("User not found!")
   
@@ -63,7 +80,8 @@ export class UsersService {
     return await this.userRepository.update(user.id, user_updated)
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    if (! await this.userRepository.findOne({ where: { id: id } })) throw new NotFoundException("User not found!")
+    return await this.userRepository.delete(id)
   }
 }

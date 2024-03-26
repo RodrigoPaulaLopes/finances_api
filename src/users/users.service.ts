@@ -28,7 +28,11 @@ export class UsersService {
     return await this.userRepository.findOne({where: {id: id}})
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto, current_user_id: string) {
+  get_current_user(user: User){
+    return user
+
+  }
+  async update(id: string, updateUserDto: UpdateUserDto) {
 
 
     if (!await this.userRepository.exists({ where: { id: id } })) throw new NotFoundException("User not found!")

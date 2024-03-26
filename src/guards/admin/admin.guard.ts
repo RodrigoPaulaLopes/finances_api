@@ -8,6 +8,8 @@ export class AdminGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
 
     const role = context.switchToHttp().getRequest().user.role.toLowerCase()
+
     return role == "administrator" ? true : false;
+
   }
 }

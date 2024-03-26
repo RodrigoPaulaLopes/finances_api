@@ -25,6 +25,12 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get("/current-user")
+  get_current_user(@UserDecorator() user: User){
+
+    return this.usersService.get_current_user(user)
+  }
+
   @UseGuards(AdminGuard)
   @Get(':id')
   findOne(@UserDecorator() user: User, @Param('id') id: string) {
@@ -32,8 +38,8 @@ export class UsersController {
   }
   @UseGuards(AdminGuard)
   @Patch(':id')
-  update(@UserDecorator('id') current_user_id: string, @Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto, current_user_id);
+  update(@UserDecorator() current_user: User, @Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Put()
@@ -44,7 +50,7 @@ export class UsersController {
   change_password(@UserDecorator() user: User, @Body() change_pass: ChangePasswordDto) {
     return this.usersService.change_password(user, change_pass);
   }
-  
+
   @UseGuards(AdminGuard)
   @Delete(':id')
   remove(@UserDecorator() user: User, @Param('id') id: string) {

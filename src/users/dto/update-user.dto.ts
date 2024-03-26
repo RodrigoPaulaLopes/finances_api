@@ -4,8 +4,6 @@ import { IsEmail, IsNotEmpty, IsString, IsStrongPassword } from 'class-validator
 import { Role } from '../enums/roles.enum';
 
 export class UpdateUserDto {
-    @IsString()
-    @IsNotEmpty()
     id?: string
 
     @IsNotEmpty()

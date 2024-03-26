@@ -2,14 +2,17 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { DebtsService } from './debts.service';
 import { CreateDebtDto } from './dto/create-debt.dto';
 import { UpdateDebtDto } from './dto/update-debt.dto';
+import { User as UserDecorator } from 'src/param-decorators/user.decorator';
+import { userInfo } from 'os';
+import { User } from 'src/users/entities/user.entity';
 
 @Controller('debts')
 export class DebtsController {
   constructor(private readonly debtsService: DebtsService) {}
 
   @Post()
-  create(@Body() createDebtDto: CreateDebtDto) {
-    return this.debtsService.create(createDebtDto);
+  create(@UserDecorator() user: User, @Body() createDebtDto: CreateDebtDto) {
+    return this.debtsService.create(user, createDebtDto);
   }
 
   @Get()

@@ -8,7 +8,6 @@ export class AuthorizationMiddleware implements NestMiddleware {
 
   constructor(private readonly jwtService: JwtService, private readonly userService: UsersService) { }
   async use(req: any, res: any, next: () => void) {
-  
     const { authorization } = req.headers
 
     if (!authorization) throw new UnauthorizedException("You must be authenticated!")

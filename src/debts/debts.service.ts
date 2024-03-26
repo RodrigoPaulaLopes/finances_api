@@ -17,19 +17,28 @@ export class DebtsService {
     return await this.debtRepository.save({...createDebtDto, user: user})
   }
 
-  findAll() {
-    return `This action returns all debts`;
+  async findAll(user: User) {
+    return await this.debtRepository.find({where: {user: {id: user.id}}})
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} debt`;
+  async findOne(user: User, id: string) {
+    if(!await this.debtRepository.exists({where: {id: id}})) throw new BadRequestException("Debt not found!")
+
+    return await this.debtRepository.findOne({where: {id: id, user: {id: user.id}}})
+
   }
 
-  update(id: number, updateDebtDto: UpdateDebtDto) {
-    return `This action updates a #${id} debt`;
+  async update(user: User, id: string, updateDebtDto: UpdateDebtDto) {
+    if(!await this.debtRepository.exists({where: {id: id}})) throw new BadRequestException("Debt not found!")
+
+    if(updateDebtDto.installments_number <= 0) throw new BadRequestException("Installments cannot be minus or equal 0")
+
+    return await this.debtRepository.update(id, {...updateDebtDto, user: user})
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} debt`;
+  async remove(id: string) {
+    if(!await this.debtRepository.exists({where: {id: id}})) throw new BadRequestException("Debt not found!")
+
+    return await this.debtRepository.delete(id)
   }
 }

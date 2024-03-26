@@ -16,22 +16,22 @@ export class DebtsController {
   }
 
   @Get()
-  findAll() {
-    return this.debtsService.findAll();
+  findAll(@UserDecorator() user: User) {
+    return this.debtsService.findAll(user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.debtsService.findOne(+id);
+  findOne(@UserDecorator() user: User, @Param('id') id: string) {
+    return this.debtsService.findOne(user, id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDebtDto: UpdateDebtDto) {
-    return this.debtsService.update(+id, updateDebtDto);
+  update(@UserDecorator() user: User, @Param('id') id: string, @Body() updateDebtDto: UpdateDebtDto) {
+    return this.debtsService.update(user, id, updateDebtDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.debtsService.remove(+id);
+  remove(@UserDecorator() user: User, @Param('id') id: string) {
+    return this.debtsService.remove(id);
   }
 }

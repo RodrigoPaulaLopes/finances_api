@@ -1,9 +1,24 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateDebtDto } from './create-debt.dto';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { StatusPayment } from '../enums/status-payment.enum';
 
-export class UpdateDebtDto extends PartialType(CreateDebtDto) {
+export class UpdateDebtDto{
     @IsNotEmpty()
     @IsString()
-    id: string
+    name: string
+
+    @IsNotEmpty()
+    @IsString()
+    description: string
+
+    @IsNotEmpty()
+    @IsNumber()
+    value: number
+
+    @IsNotEmpty()
+    expiration_date: Date
+    @IsNotEmpty()
+    @IsNumber()
+    installments_number: number
+    @IsNotEmpty()
+    status: StatusPayment
 }
